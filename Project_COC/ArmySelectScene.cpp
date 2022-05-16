@@ -18,7 +18,7 @@ using namespace std;
 void ArmySelectScene::Initialize() {
     // parameter initialization
     // TODO 2 (1/8): modify the totalArmy amount.
-    totalArmy = 2;
+    totalArmy = 3;
 
     // Space status background
     AddNewObject(new Engine::Image("play/sand.png", 1250, 0, 336, 896));
@@ -49,7 +49,8 @@ void ArmySelectScene::Initialize() {
     // Add new enemy
     armyAmount[1] = 0;
     ArmyImage[1] = "play/bombs.png";
-
+    armyAmount[2] = 0;
+    ArmyImage[2] = "play/enemy-3.png";
     for (int i=0; i<totalArmy; i++) {
         AddNewArmy(i, ArmyImage[i], 1);
     }

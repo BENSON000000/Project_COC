@@ -187,6 +187,8 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="Start_Scene.cpp" />
+    <ClCompile Include="TankArmy.cpp" />
+    <ClCompile Include="TankBullet.cpp" />
     <ClCompile Include="WallDefense.cpp" />
     <ClCompile Include="WinScene.cpp" />
   </ItemGroup>
@@ -228,6 +230,8 @@
     <ClInclude Include="Sprite.hpp" />
     <ClInclude Include="StageSelectScene.hpp" />
     <ClInclude Include="Start_Scene.hpp" />
+    <ClInclude Include="TankArmy.hpp" />
+    <ClInclude Include="TankBullet.hpp" />
     <ClInclude Include="ViewController.h" />
     <ClInclude Include="WallDefense.hpp" />
     <ClInclude Include="WinScene.hpp" />
