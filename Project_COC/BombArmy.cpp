@@ -16,7 +16,7 @@
 
 //Army(std::string img, float x, float y, float radius, float coolDown, float speed, float hp, int id, float shootRadius);
 BombArmy::BombArmy(float x, float y) :
-    Army("play/bombs.png", x, y, 20, 0, 80, 15, 1, 0) {
+    Army("play/bombs.png", x, y, 20, 0, 80, 200, 1, 0) {
     // Move center downward, since we the army head is slightly biased upward.
     Anchor.y += 8.0f / GetBitmapHeight();
 }
@@ -103,10 +103,10 @@ void BombArmy::Update(float deltaTime) {
 
 // Since the bomb army cannot shoot, the function doesn't need to do anything.
 void BombArmy::CreateBullet(Engine::Point pt) {}
-
 // TODO 2 (5/8): You can imitate the hit function in Army class. Notice that the bomb army won't have explosion effect.
 void BombArmy::Hit(float damage) {
     HP -= damage;
+    speed = 20;
     if (HP <= 0) {
         for (auto& it : lockedDefenses) it->Target = nullptr;
         getPlayScene()->ArmyGroup->RemoveObject(objectIterator);

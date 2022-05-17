@@ -33,6 +33,7 @@
 #include "TankArmy.hpp"
 // Defense
 #include "CannonDefense.hpp"
+#include "CannonSlow.hpp"
 #include "WallDefense.hpp"
 
 #define LEFT 0
@@ -303,6 +304,7 @@ void PlayScene::ReadMap() {
         case '0': mapData.push_back(TILE_FLOOR); break;
         case '1': mapData.push_back(TILE_WALL); break;
         case '2': mapData.push_back(TILE_CANNON); break;
+        case '3': mapData.push_back(TILE_SLOWCANNON); break;
         case '\n':
         case '\r':
             if (static_cast<int>(mapData.size()) / MapWidth != 0)
@@ -334,6 +336,8 @@ void PlayScene::ReadMap() {
             case TILE_CANNON:
                 DefenseGroup->AddNewObject(new CannonDefense(j * BlockSize + BlockSize / 2, i * BlockSize + BlockSize / 2));
                 break;
+            case TILE_SLOWCANNON:
+                DefenseGroup->AddNewObject(new CannonSlow(j * BlockSize + BlockSize / 2, i * BlockSize + BlockSize / 2));
             case TILE_FLOOR:
                 if (j <= MapWidth - 2 && j >= 2) {
                     if (mapState[i][j - 2] == TILE_WALL && mapState[i][j - 1] == TILE_WALL) {
@@ -361,7 +365,6 @@ void PlayScene::ConstructUI() {
     ConstructButton(0, ArmyImage[0]); // Warrior
     ConstructButton(1, ArmyImage[1]); // Bombs
     ConstructButton(2, ArmyImage[2]); //Tank
-
 }
 void PlayScene::ConstructButton(int id, std::string imageName) {
     ArmyButton* btn;
@@ -410,7 +413,7 @@ bool PlayScene::CheckOccupied(int x, int y) {
         return true;
 
     TileType tt = mapState[y][x];
-    if (tt == TILE_WALL || tt == TILE_CANNON) return true;
+    if (tt == TILE_WALL || tt == TILE_CANNON || tt == TILE_SLOWCANNON) return true;
 
     if (x >= corners[0].x && x <= corners[1].x
         && y >= corners[0].y && y <= corners[2].y

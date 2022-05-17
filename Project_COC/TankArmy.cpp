@@ -11,7 +11,7 @@
 #include "TankBullet.hpp"
 
 //Army(std::string img, float x, float y, float radius, float coolDown, float speed, float hp, int id, float shootRadius);
-TankArmy::TankArmy(int x, int y) : Army("play/enemy-3.png", x, y, 20, 2.5, 45, 75, 0, 1.5 * PlayScene::BlockSize) {
+TankArmy::TankArmy(int x, int y) : Army("play/enemy-3.png", x, y, 20, 2.5, 45, 110, 0, 1.5 * PlayScene::BlockSize) {
     // Use bounding circle to detect collision is for simplicity, pixel-perfect collision can be implemented quite easily,
     // and efficiently if we use AABB collision detection first, and then pixel-perfect collision.
 }

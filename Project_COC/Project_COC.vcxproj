@@ -161,6 +161,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CannonBullet.cpp" />
     <ClCompile Include="CannonDefense.cpp" />
+    <ClCompile Include="CannonSlow.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Defense.cpp" />
     <ClCompile Include="DirtyEffect.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Bullet.hpp" />
     <ClInclude Include="CannonBullet.hpp" />
     <ClInclude Include="CannonDefense.hpp" />
+    <ClInclude Include="CannonSlow.hpp" />
     <ClInclude Include="Collider.hpp" />
     <ClInclude Include="Defense.hpp" />
     <ClInclude Include="DirtyEffect.hpp" />

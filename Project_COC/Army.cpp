@@ -34,6 +34,7 @@ Army::Army(std::string img, float x, float y, float radius, float coolDown, floa
     Role(img, x, y), coolDown(coolDown), speed(speed), id(id), shootRadius(shootRadius) {
     CollisionRadius = radius;
     HP = hp;
+    SPD = speed;
     reachEndTime = 0;
     wallPos = Engine::Point(-1, -1);
     Velocity = Engine::Point(0, 0);
@@ -41,6 +42,7 @@ Army::Army(std::string img, float x, float y, float radius, float coolDown, floa
 
 void Army::Hit(float damage) {
     HP -= damage;
+    speed = 20;
     if (HP <= 0) {
         OnExplode();
         // Remove all Defense's reference to target.

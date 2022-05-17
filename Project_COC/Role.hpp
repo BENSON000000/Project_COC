@@ -12,6 +12,7 @@ class Turret;
 class Role : public Engine::Sprite {
 protected:
 	float HP;
+	float SPD;
 	PlayScene* getPlayScene();
 	virtual void OnExplode();
 public:
