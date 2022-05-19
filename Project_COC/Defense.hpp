@@ -10,15 +10,15 @@
 class Army;
 class PlayScene;
 
-class Defense: public Role {
+class Defense : public Role {
 protected:
     float shootRadius;
     float coolDown;
     float reload = 0;
-    float rotateRadian = 2 * ALLEGRO_PI;    
+    float rotateRadian = 2 * ALLEGRO_PI;
     std::list<Defense*>::iterator lockedDefenseIterator;
     virtual void CreateBullet(Engine::Point pt) = 0;
-    
+
 public:
     int id;
     bool Enabled = true;

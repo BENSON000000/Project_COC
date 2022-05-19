@@ -23,10 +23,9 @@ BombArmy::BombArmy(float x, float y) :
 void BombArmy::Update(float deltaTime) {
     // PlayScene
     PlayScene* scene = getPlayScene();
-
     if (isPreview) return ;
-    
     // position
+    
     int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
     int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
     
@@ -106,7 +105,7 @@ void BombArmy::CreateBullet(Engine::Point pt) {}
 // TODO 2 (5/8): You can imitate the hit function in Army class. Notice that the bomb army won't have explosion effect.
 void BombArmy::Hit(float damage) {
     HP -= damage;
-    speed = 20;
+    //speed = 20;
     if (HP <= 0) {
         for (auto& it : lockedDefenses) it->Target = nullptr;
         getPlayScene()->ArmyGroup->RemoveObject(objectIterator);

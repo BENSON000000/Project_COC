@@ -35,6 +35,7 @@
 #include "CannonDefense.hpp"
 #include "CannonSlow.hpp"
 #include "WallDefense.hpp"
+#include "Trap.hpp"
 
 #define LEFT 0
 #define RIGHT 1
@@ -135,9 +136,13 @@ void PlayScene::Update(float deltaTime) {
         IScene::Update(deltaTime);
         ticks += deltaTime;
     }
-
+    bool TrapOnly = true;
+    for (auto u : DefenseGroup->GetObjects()) {
+        Defense* df = dynamic_cast<Defense*>(u);
+        if (df->id != 4) TrapOnly = false;
+    }
     // Win
-    if (DefenseGroup->GetObjects().empty()) {
+    if (DefenseGroup->GetObjects().empty() || TrapOnly) {
         Engine::GameEngine::GetInstance().ChangeScene("win");
     }
 
@@ -305,6 +310,7 @@ void PlayScene::ReadMap() {
         case '1': mapData.push_back(TILE_WALL); break;
         case '2': mapData.push_back(TILE_CANNON); break;
         case '3': mapData.push_back(TILE_SLOWCANNON); break;
+        case '4': mapData.push_back(TILE_TRAP); break;
         case '\n':
         case '\r':
             if (static_cast<int>(mapData.size()) / MapWidth != 0)
@@ -344,6 +350,9 @@ void PlayScene::ReadMap() {
                         corners[cornerIdx++] = Engine::Point(j - 1, i);
                     }
                 }
+                break;
+            case TILE_TRAP:
+                DefenseGroup->AddNewObject(new Trap(j * BlockSize + BlockSize / 2, i * BlockSize + BlockSize / 2));
                 break;
             default:
                 throw std::ios_base::failure("Map data is corrupted.");

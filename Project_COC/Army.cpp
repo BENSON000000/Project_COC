@@ -34,19 +34,20 @@ Army::Army(std::string img, float x, float y, float radius, float coolDown, floa
     Role(img, x, y), coolDown(coolDown), speed(speed), id(id), shootRadius(shootRadius) {
     CollisionRadius = radius;
     HP = hp;
-    SPD = speed;
     reachEndTime = 0;
     wallPos = Engine::Point(-1, -1);
     Velocity = Engine::Point(0, 0);
 }
 
 void Army::Hit(float damage) {
+    for (auto u : lockedDefenses) {
+        if (u->id == 3) speed = 25;
+    }
     HP -= damage;
-    speed = 20;
     if (HP <= 0) {
         OnExplode();
         // Remove all Defense's reference to target.
-        for (auto& it: lockedDefenses)
+        for (auto& it : lockedDefenses)
             it->Target = nullptr;
         getPlayScene()->ArmyGroup->RemoveObject(objectIterator);
         AudioHelper::PlayAudio("explosion.wav");
@@ -57,13 +58,13 @@ void Army::Update(float deltaTime) {
     PlayScene* scene = getPlayScene();
 
     const int distThreshold = PlayScene::BlockSize / 32;
-    
-    if (isPreview) return ;
-    
+
+    if (isPreview) return;
+
     // position
     int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
     int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
-    
+
     if (region == 5) {
         if (!Target) {
             // Lock closet target
@@ -100,7 +101,7 @@ void Army::Update(float deltaTime) {
             else {
                 float tx = Target->Position.x;
                 float ty = Target->Position.y;
-                
+
                 if (dir == 1) {
                     if (abs(tx - Position.x) > distThreshold) {
                         Velocity = (Position.x < tx) ? Engine::Point(1, 0) : Engine::Point(-1, 0);
@@ -186,7 +187,7 @@ void Army::Update(float deltaTime) {
                 }
             }
         }
-        
+
         // there's no broken wall
         if (!movingToWall) {
             if (!Target) {
@@ -210,7 +211,7 @@ void Army::Update(float deltaTime) {
             }
             else {
                 Rotation = UpdateRotation(deltaTime, Target->Position);
-                
+
                 // Shoot reload.
                 reload -= deltaTime;
                 if (reload <= 0) {
@@ -225,7 +226,7 @@ void Army::Update(float deltaTime) {
                 else {
                     float tx = Target->Position.x;
                     float ty = Target->Position.y;
-                    
+
                     if (dir == 0) {
                         if (abs(tx - Position.x) > distThreshold) {
                             Velocity = (Position.x < tx) ? Engine::Point(1, 0) : Engine::Point(-1, 0);
@@ -257,7 +258,7 @@ void Army::Update(float deltaTime) {
             // position
             float wx = wallPos.x;
             float wy = wallPos.y;
-            
+
             if (abs(wx - Position.x) < distThreshold && abs(wy - Position.y) < distThreshold) {
                 Position = wallPos;
                 movingToWall = false;
@@ -305,57 +306,57 @@ bool Army::InShootingRange(Engine::Point obj) {
 int Army::ManHattanDistance(Engine::Point target) {
     int tx = static_cast<int>(floor(target.x / PlayScene::BlockSize));
     int ty = static_cast<int>(floor(target.y / PlayScene::BlockSize));
-    
+
     int mx = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
     int my = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
-    
+
     return abs(tx - mx) + abs(ty - my);
 }
 
 void Army::CalcRegion(int x, int y) {
-    PlayScene *scene = getPlayScene();
-    
+    PlayScene* scene = getPlayScene();
+
     // 1
     if (x < scene->corners[TOP_LEFT].x && y < scene->corners[TOP_LEFT].y) {
         region = 1;
     }
-    
+
     // 2
     if (x >= scene->corners[TOP_LEFT].x && x <= scene->corners[TOP_RIGHT].x && y <= scene->corners[TOP_LEFT].y) {
         region = 2;
     }
-    
+
     // 3
     if (x > scene->corners[TOP_RIGHT].x && y < scene->corners[TOP_RIGHT].y) {
         region = 3;
     }
-    
+
     // 4
     if (x <= scene->corners[TOP_LEFT].x && y >= scene->corners[TOP_LEFT].y && y <= scene->corners[BOTTOM_LEFT].y) {
         region = 4;
     }
-    
+
     // 5
     if (x >= scene->corners[TOP_LEFT].x && x <= scene->corners[TOP_RIGHT].x
         && y >= scene->corners[TOP_LEFT].y && y <= scene->corners[BOTTOM_LEFT].y) {
         region = 5;
     }
-    
+
     // 6
     if (x >= scene->corners[TOP_RIGHT].x && y >= scene->corners[TOP_RIGHT].y && y <= scene->corners[BOTTOM_RIGHT].y) {
         region = 6;
     }
-    
+
     // 7
     if (x < scene->corners[BOTTOM_LEFT].x && y > scene->corners[BOTTOM_LEFT].y) {
         region = 7;
     }
-    
+
     // 8
     if (x >= scene->corners[BOTTOM_LEFT].x && x <= scene->corners[BOTTOM_RIGHT].x && y >= scene->corners[BOTTOM_LEFT].y) {
         region = 8;
     }
-    
+
     // 9
     if (x > scene->corners[BOTTOM_RIGHT].x && y > scene->corners[BOTTOM_RIGHT].y) {
         region = 9;
@@ -371,7 +372,7 @@ float Army::UpdateRotation(float deltaTime, Engine::Point target) {
     // Might have floating-point precision error.
     if (cosTheta > 1) cosTheta = 1;
     else if (cosTheta < -1) cosTheta = -1;
-    
+
     if (cosTheta == -1) ret = ALLEGRO_PI;
     else {
         float radian = acos(cosTheta);

@@ -13,7 +13,6 @@
 #define MAX_ARMY_AMOUNT 6
 #define WALL_SIZE 4
 
-
 class Defense;
 class Army;
 namespace Engine {
@@ -31,7 +30,8 @@ private:
         TILE_WALL,
         TILE_CANNON,
 		TILE_OCCUPIED,
-		TILE_SLOWCANNON
+		TILE_SLOWCANNON,
+		TILE_TRAP,
 	};
 	ALLEGRO_SAMPLE_ID bgmId;
 	std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> deathBGMInstance;

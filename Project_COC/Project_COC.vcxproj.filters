@@ -147,6 +147,9 @@
     <ClCompile Include="CannonSlow.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Trap.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Allegro5Exception.hpp">
@@ -276,6 +279,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="CannonSlow.hpp">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Trap.hpp">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

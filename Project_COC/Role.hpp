@@ -12,10 +12,10 @@ class Turret;
 class Role : public Engine::Sprite {
 protected:
 	float HP;
-	float SPD;
 	PlayScene* getPlayScene();
 	virtual void OnExplode();
 public:
+	bool slow = false;
 	Role(std::string img, float x, float y);
  	virtual void Hit(float damage);
 
