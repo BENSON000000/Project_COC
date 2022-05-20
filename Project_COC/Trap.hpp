@@ -7,7 +7,7 @@ class Trap : public Defense {
 public:
     Trap(float x, float y);
     void CreateBullet(Engine::Point pt) override;
-    void TrapDefense(float deltaTime);
+    void Update(float deltaTime);
 };
 
 #endif /* Trap_hpp */

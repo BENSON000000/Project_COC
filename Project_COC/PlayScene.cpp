@@ -31,6 +31,7 @@
 #include "BombArmy.hpp"
 #include "ArcherArmy.hpp"
 #include "TankArmy.hpp"
+#include "IceSpell.hpp"
 // Defense
 #include "CannonDefense.hpp"
 #include "CannonSlow.hpp"
@@ -218,6 +219,8 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
                     preview = new BombArmy(0, 0);
                 else if (remainId == 2)
                     preview = new TankArmy(0, 0);
+                else if (remainId == 3)
+                    preview = new IceSpell(0, 0);
 
                 preview->Position = Engine::GameEngine::GetInstance().GetMousePosition();
                 preview->Tint = al_map_rgba(255, 255, 255, 200);
@@ -374,18 +377,27 @@ void PlayScene::ConstructUI() {
     ConstructButton(0, ArmyImage[0]); // Warrior
     ConstructButton(1, ArmyImage[1]); // Bombs
     ConstructButton(2, ArmyImage[2]); //Tank
+    ConstructButton(3, ArmyImage[3]); //Ice
 }
 void PlayScene::ConstructButton(int id, std::string imageName) {
     ArmyButton* btn;
     // Button
-    btn = new ArmyButton("play/floor.png", "play/dirt.png",
-        Engine::Sprite(imageName, 175 + 120 * id, BlockSize * MapHeight + 10, 80, 80, 0, 0)
-        , 170 + 120 * id, BlockSize * MapHeight, 0, id);
+    if (id == 3) {
+        btn = new ArmyButton("play/floor.png", "play/dirt.png",
+            Engine::Sprite(imageName, 175 + 120 * (id + 5), BlockSize * MapHeight + 10, 80, 80, 0, 0)
+            , 170 + 120 * id, BlockSize * MapHeight, 0, id);
+    }
+    else {
+        btn = new ArmyButton("play/floor.png", "play/dirt.png",
+            Engine::Sprite(imageName, 175 + 120 * id, BlockSize * MapHeight + 10, 80, 80, 0, 0)
+            , 170 + 120 * id, BlockSize * MapHeight, 0, id);
+    }
     // Reference: Class Member Function Pointer and std::bind.
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, id));
     UIGroup->AddNewControlObject(btn);
     // Button Label
-    AddNewObject(UIArmyAmount[id] = new Engine::Label("x" + std::to_string(armyAmount[id]), "pirulen.ttf", 20.5, 230 + 120 * id, BlockSize * MapHeight + 110, 0, 0, 0, 255, 0.5, 0.5));
+    if(id == 3) AddNewObject(UIArmyAmount[id] = new Engine::Label("x" + std::to_string(armyAmount[id]), "pirulen.ttf", 20.5, 230 + 120 * (id + 5), BlockSize * MapHeight + 110, 0, 0, 0, 255, 0.5, 0.5));
+    else AddNewObject(UIArmyAmount[id] = new Engine::Label("x" + std::to_string(armyAmount[id]), "pirulen.ttf", 20.5, 230 + 120 * id, BlockSize * MapHeight + 110, 0, 0, 0, 255, 0.5, 0.5));
 }
 
 void PlayScene::UIBtnClicked(int id) {
@@ -404,6 +416,8 @@ void PlayScene::UIBtnClicked(int id) {
     if (id == 2)
         preview = new TankArmy(0, 0);
 
+    if (id == 3)
+        preview = new IceSpell(0, 0);
     if (!preview)
         return;
 

@@ -12,7 +12,7 @@
 
 //Defense(std::string imgDefense, float x, float y, float radius, float coolDown, int hp, int id, float shootRadius);
 Trap::Trap(float x, float y) :
-    Defense("play/bomb.png", x, y, 20, 0.1, 30, 4, PlayScene::BlockSize * 1.5) {
+    Defense("play/bomb.png", x, y, 20, 0.1, 30, 4, PlayScene::BlockSize) {
     // Move center downward, since we the turret head is slightly biased upward.
     Anchor.y += 8.0f / GetBitmapHeight();
 }
@@ -28,7 +28,16 @@ void Trap::CreateBullet(Engine::Point pt) {
     AudioHelper::PlayAudio("gun.wav");*/
 }
 
-/*void TrapDefense::Update(float deltaTime) {
+void Trap::Update(float deltaTime) {
     Sprite::Update(deltaTime);
-    PlayScene* scene = getplayScene;
-}*/
+    PlayScene* scene = getPlayScene();
+        if (!Enabled) return;
+    int ey;
+    for (auto& u : scene->ArmyGroup->GetObjects()) {
+        if (InShootingRange(u->Position)) {
+            Target = dynamic_cast<Army*>(u);
+            Target->Hit(INFINITY);
+            Hit(INFINITY);
+        }
+    }
+}

@@ -168,6 +168,7 @@
     <ClCompile Include="ExplosionEffect.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Group.cpp" />
+    <ClCompile Include="IceSpell.cpp" />
     <ClCompile Include="IControl.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageButton.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="ExplosionEffect.hpp" />
     <ClInclude Include="GameEngine.hpp" />
     <ClInclude Include="Group.hpp" />
+    <ClInclude Include="IceSpell.hpp" />
     <ClInclude Include="IControl.hpp" />
     <ClInclude Include="Image.hpp" />
     <ClInclude Include="ImageButton.hpp" />
