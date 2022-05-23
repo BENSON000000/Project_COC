@@ -6,6 +6,7 @@
 class IceSpell : public Army {
 public:
     IceSpell(int x, int y);
+    void Update(float deltaTime);
     void CreateBullet(Engine::Point pt) override;
 };
 

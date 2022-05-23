@@ -32,6 +32,27 @@ void Trap::Update(float deltaTime) {
     Sprite::Update(deltaTime);
     PlayScene* scene = getPlayScene();
         if (!Enabled) return;
+    Army* trgt[100];
+    int cnt = 0;
+    for (auto& u : scene->ArmyGroup->GetObjects()) {
+        if (InShootingRange(u->Position)) {
+            Target = dynamic_cast<Army*>(u);
+            trgt[cnt++] = Target;
+        }
+    }
+    if (cnt > 0) {
+        for (int i = 0; i < cnt; i++) {
+            trgt[i]->Hit(INFINITY);
+        }
+        Hit(INFINITY);
+    }
+}
+
+/*
+void Trap::Update(float deltaTime) {
+    Sprite::Update(deltaTime);
+    PlayScene* scene = getPlayScene();
+        if (!Enabled) return;
     int ey;
     for (auto& u : scene->ArmyGroup->GetObjects()) {
         if (InShootingRange(u->Position)) {
@@ -41,3 +62,4 @@ void Trap::Update(float deltaTime) {
         }
     }
 }
+*/

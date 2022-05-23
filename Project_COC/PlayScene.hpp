@@ -10,7 +10,7 @@
 #include "IScene.hpp"
 #include "Point.hpp"
 
-#define MAX_ARMY_AMOUNT 6
+#define MAX_ARMY_AMOUNT 20
 #define WALL_SIZE 4
 
 class Defense;
@@ -32,6 +32,7 @@ private:
 		TILE_OCCUPIED,
 		TILE_SLOWCANNON,
 		TILE_TRAP,
+		TILE_SPELL
 	};
 	ALLEGRO_SAMPLE_ID bgmId;
 	std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> deathBGMInstance;

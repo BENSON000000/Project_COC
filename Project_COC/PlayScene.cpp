@@ -23,6 +23,7 @@
 #include "Resources.hpp"
 #include "Sprite.hpp"
 #include "LOG.hpp"
+#include "ArmySelectScene.hpp"
 
 // Button
 #include "ArmyButton.hpp"
@@ -43,7 +44,7 @@
 #define UP 2
 #define DOWN 3
 #define WALL_SIZE 4
-#define MAX_ARMY_AMOUNT 6
+#define MAX_ARMY_AMOUNT 20
 
 // TODO 2 (4/8) : Add the BombArmy when click the imageButton and place it. You can search for the ArcherArmy to know where to add.
 
@@ -106,7 +107,7 @@ void PlayScene::Update(float deltaTime) {
     // Lose
     bool armyEmpty = true;
     for (int i = 0; i < totalArmy; i++) {
-        if (armyAmount[i] > 0) {
+        if (armyAmount[i] > 0 && i != 3) {
             armyEmpty = false;
             break;
         }
@@ -124,7 +125,6 @@ void PlayScene::Update(float deltaTime) {
 //        delete GroundEffectGroup;
 //        delete EffectGroup;
 //        delete UIGroup;
-
         Engine::GameEngine::GetInstance().ChangeScene("lose");
     }
 
@@ -169,6 +169,7 @@ void PlayScene::OnMouseMove(int mx, int my) {
     const int x = mx / BlockSize;
     const int y = my / BlockSize;
 
+
     if (!preview || x < 0 || x >= MapWidth || y < 0 || y >= MapHeight) {
         imgTarget->Visible = false;
         return;
@@ -188,10 +189,18 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
     if (x < 0 || x >= MapWidth || y < 0 || y >= MapHeight)
         return;
     if (button & 1) {
-        if (!CheckOccupied(x, y)) {
+        if (preview->id == 3 || !CheckOccupied(x, y)) {
             if (!preview)
                 return;
-
+            if (preview->id == 3) {
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        Engine::Sprite* sprite;
+                        GroundEffectGroup->AddNewObject(sprite = new DirtyEffect("play/ice.png", 1, (x+i) * BlockSize + BlockSize / 2, (y+j) * BlockSize + BlockSize / 2));
+                        sprite->Rotation = 0;
+                    }
+                }
+            }
             ReduceAmount(preview->id);
             int remainId = armyAmount[preview->id] > 0 ? preview->id : -1;
             // Remove Preview.
@@ -382,10 +391,11 @@ void PlayScene::ConstructUI() {
 void PlayScene::ConstructButton(int id, std::string imageName) {
     ArmyButton* btn;
     // Button
+
     if (id == 3) {
         btn = new ArmyButton("play/floor.png", "play/dirt.png",
-            Engine::Sprite(imageName, 175 + 120 * (id + 5), BlockSize * MapHeight + 10, 80, 80, 0, 0)
-            , 170 + 120 * id, BlockSize * MapHeight, 0, id);
+            Engine::Sprite(imageName, 175 + 120 * (id+7), BlockSize * MapHeight + 10, 80, 80, 0, 0)
+            , 170 + 120 * (id+7), BlockSize * MapHeight, 0, id);
     }
     else {
         btn = new ArmyButton("play/floor.png", "play/dirt.png",
@@ -396,7 +406,7 @@ void PlayScene::ConstructButton(int id, std::string imageName) {
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, id));
     UIGroup->AddNewControlObject(btn);
     // Button Label
-    if(id == 3) AddNewObject(UIArmyAmount[id] = new Engine::Label("x" + std::to_string(armyAmount[id]), "pirulen.ttf", 20.5, 230 + 120 * (id + 5), BlockSize * MapHeight + 110, 0, 0, 0, 255, 0.5, 0.5));
+    if(id == 3) AddNewObject(UIArmyAmount[id] = new Engine::Label("x" + std::to_string(armyAmount[id]), "pirulen.ttf", 20.5, 230 + 120 * (id+7), BlockSize * MapHeight + 110, 0, 0, 0, 255, 0.5, 0.5));
     else AddNewObject(UIArmyAmount[id] = new Engine::Label("x" + std::to_string(armyAmount[id]), "pirulen.ttf", 20.5, 230 + 120 * id, BlockSize * MapHeight + 110, 0, 0, 0, 255, 0.5, 0.5));
 }
 
@@ -436,7 +446,7 @@ bool PlayScene::CheckOccupied(int x, int y) {
         return true;
 
     TileType tt = mapState[y][x];
-    if (tt == TILE_WALL || tt == TILE_CANNON || tt == TILE_SLOWCANNON) return true;
+    if (tt == TILE_WALL || tt == TILE_CANNON || tt == TILE_SLOWCANNON || tt == TILE_SPELL) return true;
 
     if (x >= corners[0].x && x <= corners[1].x
         && y >= corners[0].y && y <= corners[2].y

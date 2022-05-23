@@ -20,6 +20,12 @@ Defense::Defense(std::string imgDefense, float x, float y, float radius, float c
 }
 void Defense::Hit(float damage) {
     HP -= damage;
+    for (auto& u : lockedArmies) {
+        Army* army = dynamic_cast<Army*>(u);
+        if (army->id == 3) {
+            Enabled = false;
+        }
+    }
     if (HP <= 0) {
         OnExplode();
         // Remove all armies' reference to target
@@ -35,9 +41,11 @@ void Defense::Hit(float damage) {
 void Defense::Update(float deltaTime) {
     Sprite::Update(deltaTime);
     PlayScene* scene = getPlayScene();
-    if (!Enabled)
+    if (!Enabled && reload >= deltaTime) {
+        reload -= deltaTime;
         return;
-    if (id != 4) {
+    }
+    if (id != 4) { //****************************************************************************
         if (!Target) {
             // Lock first seen target.
             // Can be improved by Spatial Hash, Quad Tree, ...
@@ -53,7 +61,7 @@ void Defense::Update(float deltaTime) {
                 }
             }
         }
-        if (Target) {
+        if (Target && Target->id != 3) {
             Engine::Point originRotation = Engine::Point(cos(Rotation - ALLEGRO_PI / 2), sin(Rotation - ALLEGRO_PI / 2));
             Engine::Point targetRotation = (Target->Position - Position).Normalize();
             float maxRotateRadian = rotateRadian * deltaTime * 2.5;
@@ -76,15 +84,19 @@ void Defense::Update(float deltaTime) {
             // Shoot reload.
             reload -= deltaTime;
             if (reload <= 0) {
+                Enabled = true;
                 // shoot.
                 reload = coolDown;
                 CreateBullet(Target->Position);
             }
         }
-    }
+    } //****************************************************************************
 }
 void Defense::Draw() const {
-    if(id != 4) Sprite::Draw();
+    if (id != 4) {
+        Sprite::Draw();
+        if(PlayScene::DebugMode) al_draw_circle(Position.x, Position.y, shootRadius, al_map_rgb(0, 0, 255), 2);
+    }
     else {
         if (PlayScene::DebugMode) {
             Sprite::Draw();
